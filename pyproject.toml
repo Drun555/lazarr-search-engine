@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lazarr-search-engine"
-version = "1.0.0"
+version = "1.1.0"
 description = "Hot-updatable search and file matching policies for Lazarr"
 requires-python = ">=3.12"
 

@@ -91,7 +91,9 @@ def test_season_identity_requires_title_season_and_episode_year(rezero):
 
 def test_season_and_episode_ranges_keep_partial_coverage(rezero):
     assert reject_reason(candidate(title="Re:Zero S01-S03 1080p"), [rezero]) is None
-    assert reject_reason(candidate(title="Re:Zero S02E01-E13 1080p"), [rezero])
+    assert (
+        reject_reason(candidate(title="Re:Zero S02E01-E13 1080p"), [rezero]) is None
+    )  # Inspect for manual mapping.
     assert reject_reason(candidate(title="Re:Zero S02E14-E25 1080p"), [rezero]) is None
 
 

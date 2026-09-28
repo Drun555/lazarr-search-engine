@@ -21,7 +21,7 @@ with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as stream:
 manifest = {
     "version": version,
     "api": 1,
-    "sdk": ">=1.6,<2",
+    "sdk": ">=1.7,<2",
     "url": f"https://raw.githubusercontent.com/Drun555/lazarr-search-engine/v{version}/engine.zip",
     "sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
 }
