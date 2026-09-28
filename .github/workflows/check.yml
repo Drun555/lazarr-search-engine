@@ -1,0 +1,21 @@
+name: Test search engine
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/checkout@v4
+        with:
+          repository: Drun555/Lazarr
+          path: host
+      - run: pip install -e ./host -e . pytest ruff
+      - run: pytest -q
+      - run: ruff check src tests scripts
+      - run: python scripts/build.py
+      - run: cmp dist/engine.zip engine.zip && cmp dist/catalog.json catalog.json
