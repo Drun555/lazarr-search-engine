@@ -4,7 +4,7 @@ import pytest
 from lazarr.config import Requirements
 from lazarr.sdk import Candidate, MetadataItem, SubtaskRequest, TorrentFile, Evidence
 from lazarr_search_engine.matcher import Matcher
-from lazarr_search_engine.selection import reject_reason, candidate_rank
+from lazarr_search_engine.selection import reject_reason, candidate_rank, confirmed_tv_number, assess_candidate
 from lazarr_search_engine.provider_utils import search_queries
 
 TITLE = (
@@ -68,8 +68,8 @@ def test_real_broadcast_number_maps_only_present_episodes(case):
     assert all("TV-6" not in q and "ТВ-6" not in q for q in queries)
 
 
-@pytest.mark.parametrize("replacement", ["(S07)", "(Сезон 7)", "(ТВ-7 / S07)", "(ТВ-7-8)"])
-def test_explicit_season_or_multi_broadcast_is_not_overridden(case, replacement):
+@pytest.mark.parametrize("replacement", ["(S07)", "(Сезон 7)", "(ТВ-7 / S07)"])
+def test_explicit_season_is_not_overridden(case, replacement):
     c, requests, _ = case
     c.title = TITLE.replace("(ТВ-7)", replacement)
     assert reject_reason(c, requests) == "Указан другой сезон"
@@ -87,14 +87,16 @@ def test_explicit_season_or_multi_broadcast_is_not_overridden(case, replacement)
 def test_broadcast_number_needs_season_name_and_unambiguous_year(case, title):
     c, requests, _ = case
     c.title = title
-    assert reject_reason(c, requests) == "Указан другой сезон"
+    assert confirmed_tv_number(c, requests[0]) is None
+    assert "Указан другой сезон" not in assess_candidate(c, requests[0]).blockers
 
 
 def test_known_episode_mapping_takes_precedence(case):
     c, requests, _ = case
     r = requests[0]
     r.media.episode_numbering = {"6:1": [{"season": 8, "episode": 1}]}
-    assert reject_reason(c, [r]) == "Указан другой сезон"
+    assert confirmed_tv_number(c, r) is None
+    assert Matcher().evaluate(c, [r], case[2]).evaluations[0].result != "MATCH"
 
 
 def test_explicit_file_season_is_never_rewritten(case):

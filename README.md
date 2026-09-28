@@ -14,7 +14,7 @@ Engine API 1 contains:
 - `matcher.Matcher().evaluate(candidate, requests, files, infohash)`: evaluations, explanations and a download plan. The host validates and applies it.
 - `associations.related_files(files, bindings)`: unambiguous video/audio/subtitle associations for the manual editor.
 
-A standalone `TV-N`/`ТВ-N` release tag may denote broadcast order. When the release confirms a requested season by its distinctive metadata title and a single premiere year, that season supplies the hint for files without season numbers. Explicit file seasons and provider episode mappings remain authoritative; no series-specific offsets are used.
+Unnumbered `[TV]`/`[ТВ]` tags count as `TV-1`: matching broadcast numbers contribute +30, mismatches -10. A broadcast-number mismatch never adds a hard blocker; explicit season labels and actual file mappings remain authoritative. A standalone `TV-N`/`ТВ-N` release tag may denote broadcast order. When the release confirms a requested season by its distinctive metadata title and a single premiere year, that season supplies the hint for files without season numbers. Explicit file seasons and provider episode mappings remain authoritative; no series-specific offsets are used.
 
 Tracker adapters, HTTP/Trawl, rate limiting, scheduling, persistence and downloads remain in Lazarr. Manual mappings are never overwritten by a policy update.
 

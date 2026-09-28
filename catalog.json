@@ -1,7 +1,7 @@
 {
-  "version": "1.1.0",
+  "version": "1.1.1",
   "api": 1,
   "sdk": ">=1.7,<2",
-  "url": "https://raw.githubusercontent.com/Drun555/lazarr-search-engine/v1.1.0/engine.zip",
-  "sha256": "1b76f4a408dc03074b65731ae4d574f34a985cd4740cbdca61ad0bb7c09022af"
+  "url": "https://raw.githubusercontent.com/Drun555/lazarr-search-engine/v1.1.1/engine.zip",
+  "sha256": "741410824ea0560dc2283e58a57497ed3a4924314afa080d654172d3cd75abbc"
 }

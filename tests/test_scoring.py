@@ -1,5 +1,5 @@
 from lazarr.sdk import TorrentFile
-from lazarr_search_engine.selection import assess_candidate, candidate_rank, reject_reason
+from lazarr_search_engine.selection import assess_candidate, candidate_rank, reject_reason, confirmed_tv_number
 from lazarr_search_engine.matcher import Matcher
 from conftest import request, candidate, audio_claim
 
@@ -111,7 +111,8 @@ def test_exact_series_alias_and_season_year_outweigh_tv_number(media):
     result = Matcher().evaluate(c, [req], [TorrentFile(index=0, path="Show - 01.mkv", size=1000)])
     assert result.evaluations[0].result == "MATCH"
     media.seasons.append({"number": 2, "title": "Season 2", "air_date": "2024-05-01"})
-    assert reject_reason(c, [req]) == "Указан другой сезон"
+    assert reject_reason(c, [req]) is None
+    assert confirmed_tv_number(c, req) is None
 
 
 def test_series_original_year_does_not_override_later_season_tv_number(media):
@@ -119,7 +120,6 @@ def test_series_original_year_does_not_override_later_season_tv_number(media):
     media.seasons = [{"number": 1, "title": "Season 1", "air_date": "2024-01-01"}]
     req = request(media)
     req.air_date = "2024-01-01"
-    assert (
-        reject_reason(candidate(title="Example Show (2020) TV-7", external_ids={}), [req])
-        == "Указан другой сезон"
-    )
+    c = candidate(title="Example Show (2020) TV-7", external_ids={})
+    assert reject_reason(c, [req]) is None
+    assert confirmed_tv_number(c, req) is None
